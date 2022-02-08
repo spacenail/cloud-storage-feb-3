@@ -3,11 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="371.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.geekbrains.cloud.client.MainController">
-    <ListView fx:id="clientView" layoutX="14.0" layoutY="52.0" prefHeight="296.0" prefWidth="257.0" />
-    <ListView fx:id="serverView" layoutX="329.0" layoutY="52.0" prefHeight="296.0" prefWidth="257.0" />
-    <TextField fx:id="clientPath" editable="false" layoutX="14.0" layoutY="26.0" prefHeight="27.0" prefWidth="257.0" />
-    <TextField fx:id="serverPath" editable="false" layoutX="329.0" layoutY="26.0" prefHeight="26.0" prefWidth="257.0" />
-    <Button layoutX="283.0" layoutY="110.0" mnemonicParsing="false" onAction="#download" prefHeight="26.0" prefWidth="35.0" text="&lt;" />
-    <Button layoutX="283.0" layoutY="145.0" mnemonicParsing="false" onAction="#upload" prefHeight="26.0" prefWidth="35.0" text="&gt;" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="371.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.311" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.geekbrains.cloud.client.MainController">
+    <ListView fx:id="clientView" layoutX="14.0" layoutY="52.0" prefHeight="296.0" prefWidth="257.0"/>
+    <ListView fx:id="serverView" layoutX="329.0" layoutY="52.0" prefHeight="296.0" prefWidth="257.0"/>
+    <TextField fx:id="clientPath" editable="false" layoutX="14.0" layoutY="26.0" prefHeight="27.0" prefWidth="257.0"/>
+    <TextField fx:id="serverPath" editable="false" layoutX="329.0" layoutY="26.0" prefHeight="26.0" prefWidth="257.0"/>
+    <Button layoutX="283.0" layoutY="110.0" mnemonicParsing="false" onAction="#download" prefHeight="26.0"
+            prefWidth="35.0" text="&lt;"/>
+    <Button layoutX="283.0" layoutY="145.0" mnemonicParsing="false" onAction="#upload" prefHeight="26.0"
+            prefWidth="35.0" text="&gt;"/>
 </AnchorPane>

@@ -1,16 +1,13 @@
 package com.geekbrains.cloud.client;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -29,6 +26,8 @@ public class MainController implements Initializable {
     private DataInputStream is;
     private DataOutputStream os;
     private byte[] buf;
+    
+    private String incomingServerPath;
 
     // Platform.runLater(() -> {})
     private void updateClientView() {
@@ -41,8 +40,24 @@ public class MainController implements Initializable {
         });
     }
 
-    public void download(ActionEvent actionEvent) {
-
+    public void download(ActionEvent actionEvent) throws IOException {
+        String item = serverView.getSelectionModel().getSelectedItem();
+            os.writeUTF("#getFile_message#");
+            os.writeUTF(item);
+            if ("#isFile#".equals(is.readUTF())) {
+                long size = is.readLong();
+                File newFileFromServer = currentDirectory.toPath().
+                        resolve(item).
+                        toFile();
+                try (OutputStream fos = new FileOutputStream(newFileFromServer)) {
+                    for (int i = 0; i < (size + BUFFER_SIZE - 1) / BUFFER_SIZE; i++) {
+                        int readCount = is.read(buf);
+                        fos.write(buf, 0, readCount);
+                    }
+                }
+            }
+            System.out.println("File: " + item + " is downloaded!");
+            updateClientView();
     }
 
     // upload file to server
@@ -61,6 +76,7 @@ public class MainController implements Initializable {
             }
             os.flush();
         }
+        //updateServerView();
     }
 
     private void initNetwork() {
@@ -83,6 +99,35 @@ public class MainController implements Initializable {
         // :: - method reference
         updateClientView();
         initNetwork();
+        updateServerView();
+        clientViewAction();
+    }
+
+    private void updateServerView() {
+        Platform.runLater(() -> {
+            serverView.getItems().clear();
+            serverView.getItems().addAll(getServerDirectory());
+            serverPath.setText(incomingServerPath);
+        });
+    }
+    
+    private ObservableList<String> getServerDirectory(){
+        ObservableList<String> serverList = null;
+        try {
+            os.writeUTF("#getDirectory_message#");
+            incomingServerPath = is.readUTF();
+            String input = is.readUTF();
+            serverList = FXCollections.
+                    observableArrayList(input.
+                            substring(1, input.length() - 1).
+                            split(", "));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return serverList;
+    }
+
+    private void clientViewAction(){
         clientView.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
                 String item = clientView.getSelectionModel().getSelectedItem();

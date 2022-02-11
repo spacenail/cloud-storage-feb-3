@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -26,8 +27,6 @@ public class MainController implements Initializable {
     private DataInputStream is;
     private DataOutputStream os;
     private byte[] buf;
-    
-    private String incomingServerPath;
 
     // Platform.runLater(() -> {})
     private void updateClientView() {
@@ -61,7 +60,7 @@ public class MainController implements Initializable {
     }
 
     // upload file to server
-    public void upload(ActionEvent actionEvent) throws IOException {
+    public void upload(ActionEvent actionEvent) throws IOException, InterruptedException {
         String item = clientView.getSelectionModel().getSelectedItem();
         File selected = currentDirectory.toPath().resolve(item).toFile();
         if (selected.isFile()) {
@@ -76,7 +75,8 @@ public class MainController implements Initializable {
             }
             os.flush();
         }
-        //updateServerView();
+        Thread.sleep(100);
+        updateServerView();
     }
 
     private void initNetwork() {
@@ -93,10 +93,9 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currentDirectory = new File(System.getProperty("user.home"));
-
-
         // run in FX Thread
         // :: - method reference
+
         updateClientView();
         initNetwork();
         updateServerView();
@@ -104,27 +103,43 @@ public class MainController implements Initializable {
     }
 
     private void updateServerView() {
-        Platform.runLater(() -> {
-            serverView.getItems().clear();
-            serverView.getItems().addAll(getServerDirectory());
-            serverPath.setText(incomingServerPath);
+        Task<String> taskPath = new Task<String>() {
+            @Override
+            protected String call() throws Exception {
+                os.writeUTF("#getPath_message#");
+                return is.readUTF();
+            }
+        };
+
+        Task<ObservableList<String>> taskList = new Task<ObservableList<String>>() {
+            @Override
+            protected ObservableList<String> call() throws Exception {
+                os.writeUTF("#getDirectory_message#");
+                String input = is.readUTF();
+                ObservableList<String> serverList = FXCollections.
+                        observableArrayList(input.
+                                substring(1, input.length() - 1).
+                                split(", "));
+                return serverList;
+            }
+        };
+
+        taskList.setOnSucceeded(event -> {
+                    serverView.getItems().clear();
+                    serverView.getItems().addAll(taskList.getValue());
+                }
+        );
+
+        taskPath.setOnSucceeded(event -> {
+            serverPath.setText(taskPath.getValue());
+            Thread th2 = new Thread(taskList);
+            th2.setDaemon(true);
+            th2.start();
         });
-    }
-    
-    private ObservableList<String> getServerDirectory(){
-        ObservableList<String> serverList = null;
-        try {
-            os.writeUTF("#getDirectory_message#");
-            incomingServerPath = is.readUTF();
-            String input = is.readUTF();
-            serverList = FXCollections.
-                    observableArrayList(input.
-                            substring(1, input.length() - 1).
-                            split(", "));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return serverList;
+
+        Thread th1 = new Thread(taskPath);
+        th1.setDaemon(true);
+        th1.start();
     }
 
     private void clientViewAction(){

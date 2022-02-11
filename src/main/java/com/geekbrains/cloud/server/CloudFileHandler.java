@@ -30,6 +30,8 @@ public class CloudFileHandler implements Runnable {
                     uploadFile();
                 } else if ("#getDirectory_message#".equals(command)) {
                     sendDirectory();
+                } else if("#getPath_message#".equals(command)){
+                    sendPath();
                 } else if ("#getFile_message#".equals(command)) {
                     String file_name = is.readUTF();
                     if (isFile(file_name)) {
@@ -78,8 +80,11 @@ public class CloudFileHandler implements Runnable {
     }
 
     private void sendDirectory() throws IOException {
-        os.writeUTF(serverDirectory.getPath());
         os.writeUTF(Arrays.toString(serverDirectory.list()));
+    }
+
+    private void sendPath() throws IOException{
+        os.writeUTF(serverDirectory.getPath());
     }
 
     private boolean isFile(String file_name) {

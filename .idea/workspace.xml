@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a561aeb6-4c3a-494a-af03-44fd24949557" name="Default Changelist" comment="v1.0 modify updateServerView() with Task&#10;&#10;TODO: synchronized DataInputStream and DataOutputStream">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/cloud/nio/TerminalServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloud-storage.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/starpiece-150x150.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/geekbrains/cloud/client/layout.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/geekbrains/cloud/client/layout.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +26,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="Lesson1" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -43,12 +43,17 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
-  <component name="RunManager" selected="Application.CloudClientApplication">
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.geekbrains.cloud" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.TerminalServer">
     <configuration name="CloudClientApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.geekbrains.cloud.client.CloudClientApplication" />
       <module name="cloud-storage" />
@@ -75,8 +80,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TerminalServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.geekbrains.cloud.nio.TerminalServer" />
+      <module name="cloud-storage-feb-3" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TerminalServer" />
         <item itemvalue="Application.CloudClientApplication" />
         <item itemvalue="Application.CloudServer" />
       </list>

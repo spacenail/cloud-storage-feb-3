@@ -10,12 +10,12 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class EchoServerNio {
+public class TerminalServer {
     private ServerSocketChannel serverSocketChannel;
     private Selector selector;
     private ByteBuffer byteBuffer;
 
-    public EchoServerNio() {
+    public TerminalServer() {
         try {
             byteBuffer = ByteBuffer.allocate(10);
             selector = Selector.open();
@@ -58,7 +58,7 @@ public class EchoServerNio {
 
     private void handleRead(SelectionKey currentKey) throws IOException {
         SocketChannel channel = (SocketChannel) currentKey.channel();
-        StringBuilder reader = new StringBuilder();
+        List<Byte> byteList = new ArrayList<>();
 
 
         while (true) {
@@ -76,19 +76,24 @@ public class EchoServerNio {
             byteBuffer.flip(); // после записи из потока в буфер меняем его режим на чтение
 
             while (byteBuffer.hasRemaining()) { // пока есть элементы в буфере
-                reader.append((char) byteBuffer.get()); // добавляем прочтенные символы в StringBuilder
+                byteList.add(byteBuffer.get());
             }
 
             byteBuffer.clear();
         }
 
-        String msg = "From server: " + reader.toString();
+        byte[] byteArray = new byte[byteList.size()];
+        int i = 0;
+        for(Byte b:byteList){
+            byteArray[i++] = b.byteValue();
+        }
+        String msg = "From server: " + new String(byteArray, StandardCharsets.UTF_8);
         System.out.println("Received: " + msg);
         channel.write(ByteBuffer.wrap(msg.getBytes(StandardCharsets.UTF_8)));
     }
 
 
     public static void main(String[] args) {
-        new EchoServerNio();
+        new TerminalServer();
     }
 }

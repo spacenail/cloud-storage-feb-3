@@ -16,6 +16,8 @@ public class TerminalServer {
     private ByteBuffer byteBuffer;
     private String welcomeMsg;
     private final String START_SYMBOL = "-> ";
+    private String HELP_MESSAGE;
+    private String UNKNOWN_COMMAND;
 
     public TerminalServer() {
         StringBuilder sb = new StringBuilder();
@@ -24,6 +26,20 @@ public class TerminalServer {
                 .append("\r\n\r\n")
                 .append(START_SYMBOL);
         welcomeMsg = sb.toString();
+
+        sb.delete(0,sb.capacity());
+        sb.append("Commands:\r\n").append("1. ls - выводит список файлов на экран\r\n")
+                .append("2. cd path - перемещается из текущей папки в папку из аргумента\r\n")
+                .append("3. cat file - печатает содержание текстового файла на экран\r\n")
+                .append("4. mkdir dir - создает папку в текущей директории\r\n")
+                .append("5. touch file - создает пустой файл в текущей директории\r\n")
+                .append(START_SYMBOL);
+        HELP_MESSAGE = sb.toString();
+
+        sb.delete(0,sb.capacity());
+        sb.append("Unknown command\r\n").append(START_SYMBOL);
+        UNKNOWN_COMMAND = sb.toString();
+
 
         try {
             byteBuffer = ByteBuffer.allocate(10);
@@ -103,21 +119,21 @@ public class TerminalServer {
         String inputMsg = new String(byteArray, StandardCharsets.UTF_8);
 
         switch (inputMsg){
-            case ("--help"):
-                lsCommand(channel);
+            case ("--help\r\n"):
+                channel.write(ByteBuffer.wrap(HELP_MESSAGE.getBytes(StandardCharsets.UTF_8)));
                 break;
-            case ("ls"):
-                helpCommand(channel);
+            case ("ls\r\n"):
+                channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                break;
+            case ("\r\n"):
+                channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                break;
+            default:
+                channel.write(ByteBuffer.wrap(UNKNOWN_COMMAND.getBytes(StandardCharsets.UTF_8)));
         }
 
     }
 
-    private void helpCommand(SocketChannel channel) {
-    }
-
-    private void lsCommand(SocketChannel channel) {
-
-    }
 
 
     public static void main(String[] args) {

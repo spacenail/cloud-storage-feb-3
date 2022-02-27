@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a561aeb6-4c3a-494a-af03-44fd24949557" name="Default Changelist" comment="change handleRead(read all symbols)">
+    <list default="true" id="a561aeb6-4c3a-494a-af03-44fd24949557" name="Default Changelist" comment="add welcome message">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/cloud/nio/TerminalServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/cloud/nio/TerminalServer.java" afterDir="false" />
     </list>
@@ -129,6 +129,7 @@
     <MESSAGE value="v0.1" />
     <MESSAGE value="v1.0 modify updateServerView() with Task&#10;&#10;TODO: synchronized DataInputStream and DataOutputStream" />
     <MESSAGE value="change handleRead(read all symbols)" />
-    <option name="LAST_COMMIT_MESSAGE" value="change handleRead(read all symbols)" />
+    <MESSAGE value="add welcome message" />
+    <option name="LAST_COMMIT_MESSAGE" value="add welcome message" />
   </component>
 </project>

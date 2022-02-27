@@ -62,7 +62,7 @@ public class TerminalServer {
 
 
         while (true) {
-            int count = channel.read(byteBuffer);
+            int count = channel.read(byteBuffer); // читаем из сокета количество байт равное buffer.remaining()
 
             if (count == 0) { // если данных нет, выходим из цикла
                 break;
@@ -75,16 +75,16 @@ public class TerminalServer {
 
             byteBuffer.flip(); // после записи из потока в буфер меняем его режим на чтение
 
-            while (byteBuffer.hasRemaining()) { // пока есть элементы в буфере
+            while (byteBuffer.hasRemaining()) { // пока есть элементы в буфере считываем по одному в список
                 byteList.add(byteBuffer.get());
             }
 
-            byteBuffer.clear();
+            byteBuffer.clear(); //очищаем буфер после каждого цикла чтения-записи
         }
 
         byte[] byteArray = new byte[byteList.size()];
         int i = 0;
-        for(Byte b:byteList){
+        for(Byte b:byteList){ // Byte[] -> byte[]
             byteArray[i++] = b.byteValue();
         }
         String msg = "From server: " + new String(byteArray, StandardCharsets.UTF_8);

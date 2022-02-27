@@ -14,8 +14,17 @@ public class TerminalServer {
     private ServerSocketChannel serverSocketChannel;
     private Selector selector;
     private ByteBuffer byteBuffer;
+    private String welcomeMsg;
+    private final String START_SYMBOL = "-> ";
 
     public TerminalServer() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Welcome in Mike terminal").append("\r\n\r\n")
+                .append("input --help to show command list")
+                .append("\r\n\r\n")
+                .append(START_SYMBOL);
+        welcomeMsg = sb.toString();
+
         try {
             byteBuffer = ByteBuffer.allocate(10);
             selector = Selector.open();
@@ -54,12 +63,16 @@ public class TerminalServer {
         socketChannel.configureBlocking(false);
         socketChannel.register(selector, SelectionKey.OP_READ);
         System.out.println("Client accepted...");
+        sendWelcomeMessage(socketChannel);
+    }
+
+    private void sendWelcomeMessage(SocketChannel socketChannel) throws IOException {
+        socketChannel.write(ByteBuffer.wrap(welcomeMsg.getBytes(StandardCharsets.UTF_8)));
     }
 
     private void handleRead(SelectionKey currentKey) throws IOException {
         SocketChannel channel = (SocketChannel) currentKey.channel();
         List<Byte> byteList = new ArrayList<>();
-
 
         while (true) {
             int count = channel.read(byteBuffer); // читаем из сокета количество байт равное buffer.remaining()
@@ -87,9 +100,23 @@ public class TerminalServer {
         for(Byte b:byteList){ // Byte[] -> byte[]
             byteArray[i++] = b.byteValue();
         }
-        String msg = "From server: " + new String(byteArray, StandardCharsets.UTF_8);
-        System.out.println("Received: " + msg);
-        channel.write(ByteBuffer.wrap(msg.getBytes(StandardCharsets.UTF_8)));
+        String inputMsg = new String(byteArray, StandardCharsets.UTF_8);
+
+        switch (inputMsg){
+            case ("--help"):
+                lsCommand(channel);
+                break;
+            case ("ls"):
+                helpCommand(channel);
+        }
+
+    }
+
+    private void helpCommand(SocketChannel channel) {
+    }
+
+    private void lsCommand(SocketChannel channel) {
+
     }
 
 

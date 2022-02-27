@@ -128,6 +128,7 @@
     <MESSAGE value="initial" />
     <MESSAGE value="v0.1" />
     <MESSAGE value="v1.0 modify updateServerView() with Task&#10;&#10;TODO: synchronized DataInputStream and DataOutputStream" />
-    <option name="LAST_COMMIT_MESSAGE" value="v1.0 modify updateServerView() with Task&#10;&#10;TODO: synchronized DataInputStream and DataOutputStream" />
+    <MESSAGE value="change handleRead(read all symbols)" />
+    <option name="LAST_COMMIT_MESSAGE" value="change handleRead(read all symbols)" />
   </component>
 </project>

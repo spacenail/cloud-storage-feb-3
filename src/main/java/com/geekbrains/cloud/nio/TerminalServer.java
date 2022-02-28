@@ -1,5 +1,6 @@
 package com.geekbrains.cloud.nio;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -8,6 +9,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class TerminalServer {
@@ -18,8 +21,10 @@ public class TerminalServer {
     private final String START_SYMBOL = "-> ";
     private String HELP_MESSAGE;
     private String UNKNOWN_COMMAND;
+    private Path serverDirectory;
 
     public TerminalServer() {
+        serverDirectory = Paths.get(".","server");
         StringBuilder sb = new StringBuilder();
         sb.append("Welcome in Mike terminal").append("\r\n\r\n")
                 .append("input --help to show command list")
@@ -123,7 +128,13 @@ public class TerminalServer {
                 channel.write(ByteBuffer.wrap(HELP_MESSAGE.getBytes(StandardCharsets.UTF_8)));
                 break;
             case ("ls\r\n"):
-                channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                String[] catalog = serverDirectory.normalize().toFile().list();
+                StringBuilder stringBuilder = new StringBuilder();
+                for (String file:catalog){
+                    stringBuilder.append(file).append("\r\n");
+                }
+                stringBuilder.append(START_SYMBOL);
+                channel.write(ByteBuffer.wrap(stringBuilder.toString().getBytes(StandardCharsets.UTF_8)));
                 break;
             case ("\r\n"):
                 channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));

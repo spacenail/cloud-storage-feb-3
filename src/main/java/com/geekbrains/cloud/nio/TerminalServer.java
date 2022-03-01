@@ -121,22 +121,36 @@ public class TerminalServer {
         for(Byte b:byteList){ // Byte[] -> byte[]
             byteArray[i++] = b.byteValue();
         }
-        String inputMsg = new String(byteArray, StandardCharsets.UTF_8);
 
-        switch (inputMsg){
-            case ("--help\r\n"):
+        String clearMsg = new String(byteArray, StandardCharsets.UTF_8).replaceAll("\\r\\n", "");
+        String[] splitArrays = clearMsg.split("\\s",2);
+
+        switch (splitArrays[0]){
+            case ("--help"):
                 channel.write(ByteBuffer.wrap(HELP_MESSAGE.getBytes(StandardCharsets.UTF_8)));
                 break;
-            case ("ls\r\n"):
-                String[] catalog = serverDirectory.normalize().toFile().list();
-                StringBuilder stringBuilder = new StringBuilder();
-                for (String file:catalog){
-                    stringBuilder.append(file).append("\r\n");
-                }
-                stringBuilder.append(START_SYMBOL);
-                channel.write(ByteBuffer.wrap(stringBuilder.toString().getBytes(StandardCharsets.UTF_8)));
+            case ("ls"):
+                channel.write(ByteBuffer.wrap(getList(serverDirectory).toString().getBytes(StandardCharsets.UTF_8)));
                 break;
-            case ("\r\n"):
+            case ("cd"):
+                if(splitArrays.length > 1) {
+                    File file = new File(splitArrays[1]);
+                    if (file.exists()) {
+                        serverDirectory = file.toPath();
+                    }
+                }
+                channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                break;
+            case ("cat"):
+                if(splitArrays.length > 1) {
+                    File file = new File(splitArrays[1]);
+                    if (file.exists()) {
+                        channel.write(ByteBuffer.wrap(getList(file.toPath()).toString().getBytes(StandardCharsets.UTF_8)));
+                    } else channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                }else channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                break;
+
+            case (""):
                 channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
                 break;
             default:
@@ -145,7 +159,15 @@ public class TerminalServer {
 
     }
 
-
+    private StringBuilder getList(Path path){
+        String[] catalog = path.toFile().list();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String file:catalog){
+            stringBuilder.append(file).append("\r\n");
+        }
+        stringBuilder.append(START_SYMBOL);
+        return stringBuilder;
+    }
 
     public static void main(String[] args) {
         new TerminalServer();

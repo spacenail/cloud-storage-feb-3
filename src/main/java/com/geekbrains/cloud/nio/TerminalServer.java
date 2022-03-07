@@ -9,6 +9,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -118,40 +119,59 @@ public class TerminalServer {
 
         byte[] byteArray = new byte[byteList.size()];
         int i = 0;
-        for(Byte b:byteList){ // Byte[] -> byte[]
+        for (Byte b : byteList) { // Byte[] -> byte[]
             byteArray[i++] = b.byteValue();
         }
 
         String clearMsg = new String(byteArray, StandardCharsets.UTF_8).replaceAll("\\r\\n", "");
-        String[] splitArrays = clearMsg.split("\\s",2);
+        String[] splitArray = clearMsg.split("\\s", 2);
 
-        switch (splitArrays[0]){
+        switch (splitArray[0]) {
             case ("--help"):
-                channel.write(ByteBuffer.wrap(HELP_MESSAGE.getBytes(StandardCharsets.UTF_8)));
+                channel.write(ByteBuffer.wrap(HELP_MESSAGE.
+                        getBytes(StandardCharsets.UTF_8)));
                 break;
             case ("ls"):
-                channel.write(ByteBuffer.wrap(getList(serverDirectory).toString().getBytes(StandardCharsets.UTF_8)));
+                channel.write(ByteBuffer.wrap(getList(serverDirectory).
+                        toString().
+                        getBytes(StandardCharsets.UTF_8)));
                 break;
             case ("cd"):
-                if(splitArrays.length > 1) {
-                    File file = new File(splitArrays[1]);
-                    if (file.exists()) {
+                if (splitArray.length > 1) {
+                    File file = new File(splitArray[1]);
+                    if (file.isDirectory()) {
                         serverDirectory = file.toPath();
                     }
                 }
-                channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                sendStartSymbol(channel);
                 break;
             case ("cat"):
-                if(splitArrays.length > 1) {
-                    File file = new File(splitArrays[1]);
-                    if (file.exists()) {
-                        channel.write(ByteBuffer.wrap(getList(file.toPath()).toString().getBytes(StandardCharsets.UTF_8)));
-                    } else channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
-                }else channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                if (splitArray.length > 1) {
+                    Path path = serverDirectory.resolve(splitArray[1]);
+                    if (Files.exists(path)) {
+                        channel.write(ByteBuffer.wrap
+                                (Files.readAllBytes(path)));
+                    }
+                }
+                sendStartSymbol(channel);
+                    break;
+            case ("mkdir"):
+                if (splitArray.length > 1) {
+                    File file = serverDirectory.resolve(splitArray[1]).toFile();
+                    file.mkdir();
+                }
+                sendStartSymbol(channel);
                 break;
 
+            case ("touch"):
+                if (splitArray.length > 1) {
+                    File file = serverDirectory.resolve(splitArray[1]).toFile();
+                    file.createNewFile();
+                }
+                sendStartSymbol(channel);
+                break;
             case (""):
-                channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
+                sendStartSymbol(channel);
                 break;
             default:
                 channel.write(ByteBuffer.wrap(UNKNOWN_COMMAND.getBytes(StandardCharsets.UTF_8)));
@@ -167,6 +187,10 @@ public class TerminalServer {
         }
         stringBuilder.append(START_SYMBOL);
         return stringBuilder;
+    }
+
+    private void sendStartSymbol(SocketChannel channel) throws IOException {
+        channel.write(ByteBuffer.wrap(START_SYMBOL.getBytes(StandardCharsets.UTF_8)));
     }
 
     public static void main(String[] args) {

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a561aeb6-4c3a-494a-af03-44fd24949557" name="Default Changelist" comment="add --help command">
+    <list default="true" id="a561aeb6-4c3a-494a-af03-44fd24949557" name="Default Changelist" comment="add cd command">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/cloud/nio/TerminalServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/cloud/nio/TerminalServer.java" afterDir="false" />
     </list>
@@ -131,6 +131,7 @@
     <MESSAGE value="change handleRead(read all symbols)" />
     <MESSAGE value="add welcome message" />
     <MESSAGE value="add --help command" />
-    <option name="LAST_COMMIT_MESSAGE" value="add --help command" />
+    <MESSAGE value="add cd command" />
+    <option name="LAST_COMMIT_MESSAGE" value="add cd command" />
   </component>
 </project>

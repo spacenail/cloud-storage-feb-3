@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a561aeb6-4c3a-494a-af03-44fd24949557" name="Default Changelist" comment="">
-      <change afterPath="$USER_HOME$/arcadia/market/adv/incut/src/main/kotlin/ru/yandex/market/adv/incut/config/YtConfig.kt" afterDir="false" />
-      <change afterPath="$USER_HOME$/arcadia/market/adv/incut/src/main/kotlin/ru/yandex/market/adv/incut/dao/reservedPrice/ReservedPriceDao.kt" afterDir="false" />
-      <change beforePath="$USER_HOME$/arcadia/market/adv/incut/ya.make" beforeDir="false" afterPath="$USER_HOME$/arcadia/market/adv/incut/ya.make" afterDir="false" />
+    <list default="true" id="a561aeb6-4c3a-494a-af03-44fd24949557" name="Default Changelist" comment="add cd command">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/cloud/nio/TerminalServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/cloud/nio/TerminalServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +22,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Lesson1" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="24n8j6sgP23u9dzkKAxdkaqJKwb" />
@@ -37,11 +41,17 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
-  <component name="RunManager" selected="Application.CloudServer">
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.geekbrains.cloud" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.TerminalServer">
     <configuration name="CloudClientApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.geekbrains.cloud.client.CloudClientApplication" />
       <module name="cloud-storage" />
@@ -68,10 +78,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TerminalServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.geekbrains.cloud.nio.TerminalServer" />
+      <module name="cloud-storage-feb-3" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.CloudServer" />
+        <item itemvalue="Application.TerminalServer" />
         <item itemvalue="Application.CloudClientApplication" />
+        <item itemvalue="Application.CloudServer" />
       </list>
     </recent_temporary>
   </component>
@@ -93,5 +111,27 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="initial" />
+    <MESSAGE value="v0.1" />
+    <MESSAGE value="v1.0 modify updateServerView() with Task&#10;&#10;TODO: synchronized DataInputStream and DataOutputStream" />
+    <MESSAGE value="change handleRead(read all symbols)" />
+    <MESSAGE value="add welcome message" />
+    <MESSAGE value="add --help command" />
+    <MESSAGE value="add cd command" />
+    <option name="LAST_COMMIT_MESSAGE" value="add cd command" />
   </component>
 </project>

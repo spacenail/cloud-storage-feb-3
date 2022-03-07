@@ -1,12 +1,9 @@
 package com.geekbrains.cloud.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class CloudFileHandler implements Runnable {
 
@@ -30,18 +27,19 @@ public class CloudFileHandler implements Runnable {
             while (true) {
                 String command = is.readUTF();
                 if ("#file_message#".equals(command)) {
-                    String name = is.readUTF();
-                    long size = is.readLong();
-                    File newFile = serverDirectory.toPath()
-                            .resolve(name)
-                            .toFile();
-                    try (OutputStream fos = new FileOutputStream(newFile)) {
-                        for (int i = 0; i < (size + BUFFER_SIZE - 1) / BUFFER_SIZE; i++) {
-                            int readCount = is.read(buf);
-                            fos.write(buf, 0, readCount);
-                        }
+                    uploadFile();
+                } else if ("#getDirectory_message#".equals(command)) {
+                    sendDirectory();
+                } else if("#getPath_message#".equals(command)){
+                    sendPath();
+                } else if ("#getFile_message#".equals(command)) {
+                    String file_name = is.readUTF();
+                    if (isFile(file_name)) {
+                        os.writeUTF("#isFile#");
+                        sendFile(file_name);
+                    } else {
+                        os.writeUTF("#isNotAFile#");
                     }
-                    System.out.println("File: " + name + " is uploaded");
                 } else {
                     System.err.println("Unknown command: " + command);
                 }
@@ -49,6 +47,50 @@ public class CloudFileHandler implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void sendFile(String file_name) throws IOException {
+        File selected = serverDirectory.toPath().
+                resolve(file_name).
+                toFile();
+        os.writeLong(selected.length());
+        try (InputStream fis = new FileInputStream(selected)) {
+            while (fis.available() > 0) {
+                int readBytes = fis.read(buf);
+                os.write(buf, 0, readBytes);
+            }
+        }
+        os.flush();
+        System.out.println("File: " + file_name + " sent to client!");
+    }
+
+    private void uploadFile() throws IOException {
+        String name = is.readUTF();
+        long size = is.readLong();
+        File newFile = serverDirectory.toPath()
+                .resolve(name)
+                .toFile();
+        try (OutputStream fos = new FileOutputStream(newFile)) {
+            for (int i = 0; i < (size + BUFFER_SIZE - 1) / BUFFER_SIZE; i++) {
+                int readCount = is.read(buf);
+                fos.write(buf, 0, readCount);
+            }
+        }
+        System.out.println("File: " + name + " is uploaded");
+    }
+
+    private void sendDirectory() throws IOException {
+        os.writeUTF(Arrays.toString(serverDirectory.list()));
+    }
+
+    private void sendPath() throws IOException{
+        os.writeUTF(serverDirectory.getPath());
+    }
+
+    private boolean isFile(String file_name) {
+        return serverDirectory.toPath()
+                .resolve(file_name).
+                        toFile().
+                        isFile();
     }
 }
